@@ -7,18 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { BookOpen, Calendar, User, CheckCircle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-
-interface Book {
-  _id: string
-  title: string
-  author: string
-  isbn: string
-  category: string
-  totalCopies: number
-  availableCopies: number
-  description?: string
-  publishedYear?: number
-}
+import { Book } from "@/types"
 
 interface BookCatalogProps {
   searchTerm: string
@@ -47,6 +36,17 @@ export default function BookCatalog({ searchTerm }: BookCatalogProps) {
 
   const handleBorrowBook = async (bookId: string) => {
     setBorrowingBook(bookId)
+    
+    // Check if user is authenticated
+    if (!user) {
+      toast({
+        title: "Authentication Error",
+        description: "You must be logged in to borrow books",
+        variant: "destructive"
+      })
+      setBorrowingBook(null)
+      return
+    }
 
     try {
       const response = await fetch("/api/borrow", {
@@ -133,14 +133,16 @@ export default function BookCatalog({ searchTerm }: BookCatalogProps) {
 
                 <Button
                   onClick={() => handleBorrowBook(book._id)}
-                  disabled={book.availableCopies === 0 || borrowingBook === book._id}
+                  disabled={!user || book.availableCopies === 0 || borrowingBook === book._id}
                   className="w-full"
                 >
                   {borrowingBook === book._id
                     ? "Borrowing..."
                     : book.availableCopies === 0
                       ? "Out of Stock"
-                      : "Borrow Book"}
+                      : !user
+                        ? "Log in to Borrow"
+                        : "Borrow Book"}
                 </Button>
               </CardContent>
             </Card>

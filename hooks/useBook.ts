@@ -1,5 +1,6 @@
 "use client"
 import { useDB } from "@/context/DBProvider"
+import { Book } from "@/types"
 
 export const useBook = () => {
   const { books, setBooks } = useDB()

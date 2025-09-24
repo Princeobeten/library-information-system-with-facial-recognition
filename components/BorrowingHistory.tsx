@@ -4,13 +4,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Clock, BookOpen } from "lucide-react"
+import { BorrowRecord as BorrowRecordType } from "@/types"
 
 interface BorrowingHistoryProps {
   userId: string
 }
 
+// Extend the BorrowRecord type with populated fields since the API populates the bookId
+interface BorrowRecord extends Omit<BorrowRecordType, 'bookId'> {
+  bookId: {
+    _id: string
+    title: string
+    author: string
+  }
+}
+
 export default function BorrowingHistory({ userId }: BorrowingHistoryProps) {
-  const [borrowRecords, setBorrowRecords] = useState([])
+  const [borrowRecords, setBorrowRecords] = useState<BorrowRecord[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

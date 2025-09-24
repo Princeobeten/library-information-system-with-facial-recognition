@@ -1,24 +1,25 @@
 "use client"
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 import { connectDB } from "@/lib/db"
+import { Book, User, BorrowRecord } from "@/types"
 
 interface DBContextType {
   connected: boolean
-  user: any
-  setUser: (user: any) => void
-  books: any[]
-  setBooks: (books: any[]) => void
-  borrowRecords: any[]
-  setBorrowRecords: (records: any[]) => void
+  user: User | null
+  setUser: (user: User | null) => void
+  books: Book[]
+  setBooks: (books: Book[]) => void
+  borrowRecords: BorrowRecord[]
+  setBorrowRecords: (records: BorrowRecord[]) => void
 }
 
 const DBContext = createContext<DBContextType | null>(null)
 
 export const DBProvider = ({ children }: { children: ReactNode }) => {
   const [connected, setConnected] = useState(false)
-  const [user, setUser] = useState(null)
-  const [books, setBooks] = useState([])
-  const [borrowRecords, setBorrowRecords] = useState([])
+  const [user, setUser] = useState<User | null>(null)
+  const [books, setBooks] = useState<Book[]>([])
+  const [borrowRecords, setBorrowRecords] = useState<BorrowRecord[]>([])
 
   useEffect(() => {
     connectDB()

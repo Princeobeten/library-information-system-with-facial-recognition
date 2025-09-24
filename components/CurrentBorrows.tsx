@@ -7,23 +7,21 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { BookOpen, AlertTriangle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
+import { BorrowRecord as BorrowRecordType } from "@/types"
+
 interface CurrentBorrowsProps {
   userId: string
   onCountUpdate?: (count: number) => void
 }
 
-interface BorrowRecord {
-  _id: string
+// Extend the BorrowRecord type with populated fields since the API populates the bookId
+interface BorrowRecord extends Omit<BorrowRecordType, 'bookId'> {
   bookId: {
     _id: string
     title: string
     author: string
     isbn: string
   }
-  borrowDate: string
-  dueDate: string
-  status: "borrowed" | "overdue"
-  fine: number
 }
 
 export default function CurrentBorrows({ userId, onCountUpdate }: CurrentBorrowsProps) {
