@@ -109,14 +109,15 @@ export default function LoginPage() {
           </TabsContent>
 
           <TabsContent value="face">
-            <div className="space-y-4">
-              <FaceRecognition onFaceDetected={handleFaceLogin} loading={loading} />
-              {error && (
-                <Alert variant="destructive">
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-            </div>
+            <FaceRecognition 
+              onFaceDetected={handleFaceLogin} 
+              loading={loading} 
+            />
+            {error && (
+              <Alert variant="destructive" className="mt-4">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
           </TabsContent>
         </Tabs>
 
